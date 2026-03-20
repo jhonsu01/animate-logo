@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimateLogo - Convierte y Anima tu Logo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AnimateLogo</h1>
+    <p class="subtitle">Sube una imagen &rarr; Convierte a SVG &rarr; Anima &rarr; Descarga</p>
+  </header>
+
+  <main>
+    <!-- Step 1: Upload -->
+    <section id="upload-section" class="card">
+      <h2>1. Sube tu imagen</h2>
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-zone-content">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <p>Arrastra tu imagen aquí o <label for="file-input" class="link">selecciona un archivo</label></p>
+          <span class="hint">PNG, JPG, BMP, GIF, WebP, TIFF — Máx 50MB</span>
+        </div>
+        <input type="file" id="file-input" accept="image/*" hidden>
+      </div>
+      <div id="image-preview" class="preview-container" hidden>
+        <img id="preview-img" alt="Preview">
+        <button id="btn-clear" class="btn btn-sm btn-ghost">Cambiar imagen</button>
+      </div>
+    </section>
+
+    <!-- Step 2: Conversion Settings -->
+    <section id="convert-section" class="card" hidden>
+      <h2>2. Opciones de Conversión</h2>
+      <div class="controls-grid">
+        <div class="control-group">
+          <label>Preset</label>
+          <select id="preset">
+            <option value="">Personalizado</option>
+            <option value="bw">Blanco y Negro</option>
+            <option value="poster" selected>Poster (Color)</option>
+            <option value="photo">Foto</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Modo de Color</label>
+          <select id="colormode">
+            <option value="color" selected>Color</option>
+            <option value="bw">Blanco y Negro</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Modo de Curvas</label>
+          <select id="mode">
+            <option value="spline" selected>Spline (Suave)</option>
+            <option value="polygon">Polígono</option>
+            <option value="pixel">Pixel</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Precisión de Color <span class="val" id="val-cp">8</span></label>
+          <input type="range" id="color_precision" min="1" max="8" value="8">
+        </div>
+        <div class="control-group">
+          <label>Filtro Speckle <span class="val" id="val-fs">4</span></label>
+          <input type="range" id="filter_speckle" min="0" max="16" value="4">
+        </div>
+        <div class="control-group">
+          <label>Gradiente <span class="val" id="val-gs">16</span></label>
+          <input type="range" id="gradient_step" min="0" max="255" value="16">
+        </div>
+        <div class="control-group">
+          <label>Umbral Esquinas <span class="val" id="val-ct">60</span>°</label>
+          <input type="range" id="corner_threshold" min="0" max="180" value="60">
+        </div>
+        <div class="control-group">
+          <label>Largo Segmento <span class="val" id="val-sl">4.0</span></label>
+          <input type="range" id="segment_length" min="3.5" max="10" value="4" step="0.5">
+        </div>
+        <div class="control-group">
+          <label>Jerárquico</label>
+          <select id="hierarchical">
+            <option value="stacked" selected>Stacked</option>
+            <option value="cutout">Cutout</option>
+          </select>
+        </div>
+      </div>
+      <button id="btn-convert" class="btn btn-primary btn-lg">Convertir a SVG</button>
+      <div id="convert-progress" class="progress" hidden>
+        <div class="progress-bar"></div>
+        <span>Convirtiendo...</span>
+      </div>
+    </section>
+
+    <!-- Step 3: Animation -->
+    <section id="animate-section" class="card" hidden>
+      <h2>3. Anima tu Logo</h2>
+
+      <div class="animate-layout">
+        <!-- SVG Preview -->
+        <div class="svg-preview-wrapper">
+          <div id="svg-container" class="svg-container"></div>
+        </div>
+
+        <!-- Animation Controls -->
+        <div class="animation-controls">
+          <h3>Transiciones</h3>
+          <div class="animation-grid">
+            <button class="anim-btn active" data-anim="none">Sin Animación</button>
+            <button class="anim-btn" data-anim="draw">Dibujar (Draw)</button>
+            <button class="anim-btn" data-anim="draw-reverse">Dibujar Reversa</button>
+            <button class="anim-btn" data-anim="draw-sync">Dibujar Sync</button>
+            <button class="anim-btn" data-anim="fade-in">Fade In</button>
+            <button class="anim-btn" data-anim="fade-in-up">Fade In Up</button>
+            <button class="anim-btn" data-anim="fade-in-scale">Fade In Scale</button>
+            <button class="anim-btn" data-anim="scale-bounce">Scale Bounce</button>
+            <button class="anim-btn" data-anim="rotate-in">Rotate In</button>
+            <button class="anim-btn" data-anim="rotate-scale">Rotate + Scale</button>
+            <button class="anim-btn" data-anim="slide-left">Slide Left</button>
+            <button class="anim-btn" data-anim="slide-right">Slide Right</button>
+            <button class="anim-btn" data-anim="stagger-fade">Stagger Fade</button>
+            <button class="anim-btn" data-anim="stagger-scale">Stagger Scale</button>
+            <button class="anim-btn" data-anim="stagger-rotate">Stagger Rotate</button>
+            <button class="anim-btn" data-anim="elastic-in">Elastic In</button>
+            <button class="anim-btn" data-anim="bounce-in">Bounce In</button>
+            <button class="anim-btn" data-anim="flip-x">Flip X</button>
+            <button class="anim-btn" data-anim="flip-y">Flip Y</button>
+            <button class="anim-btn" data-anim="typewriter">Typewriter</button>
+          </div>
+
+          <h3>Opciones de Animación</h3>
+          <div class="controls-grid">
+            <div class="control-group">
+              <label>Duración <span class="val" id="val-dur">1500</span>ms</label>
+              <input type="range" id="anim-duration" min="300" max="5000" value="1500" step="100">
+            </div>
+            <div class="control-group">
+              <label>Delay <span class="val" id="val-del">0</span>ms</label>
+              <input type="range" id="anim-delay" min="0" max="2000" value="0" step="50">
+            </div>
+            <div class="control-group">
+              <label>Easing</label>
+              <select id="anim-easing">
+                <option value="easeInOutQuad">Ease In Out Quad</option>
+                <option value="easeOutElastic">Elastic</option>
+                <option value="easeOutBounce">Bounce</option>
+                <option value="easeInOutCubic">Cubic</option>
+                <option value="easeInOutExpo">Expo</option>
+                <option value="easeOutBack">Back</option>
+                <option value="linear">Linear</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label>Loop</label>
+              <select id="anim-loop">
+                <option value="false">Una vez</option>
+                <option value="true">Infinito</option>
+                <option value="2">2 veces</option>
+                <option value="3">3 veces</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="anim-actions">
+            <button id="btn-play" class="btn btn-primary">Reproducir</button>
+            <button id="btn-reset" class="btn btn-ghost">Resetear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: Download -->
+    <section id="download-section" class="card" hidden>
+      <h2>4. Descargar</h2>
+      <div class="download-options">
+        <div class="control-group">
+          <label>Resolución SVG</label>
+          <select id="export-resolution">
+            <option value="1">Original</option>
+            <option value="1.5">1.5x</option>
+            <option value="2" selected>2x (Alta Calidad)</option>
+            <option value="3">3x</option>
+            <option value="4">4x (Ultra)</option>
+          </select>
+        </div>
+        <div class="download-buttons">
+          <button id="btn-download-svg" class="btn btn-primary">Descargar SVG Animado</button>
+          <button id="btn-download-svg-static" class="btn btn-ghost">Descargar SVG Estático</button>
+          <button id="btn-download-gif" class="btn btn-ghost">Descargar GIF</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>AnimateLogo &mdash; Powered by vtracer + anime.js + vivus</p>
+  </footer>
+
+  <script src="libs/anime.min.js"></script>
+  <script src="libs/vivus.min.js"></script>
+  <script src="libs/gif.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
