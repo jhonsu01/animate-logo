@@ -57,7 +57,7 @@ Sube imagen (drag & drop)  -->  Elige preset de conversion  -->  Selecciona anim
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/TU_USUARIO/animate-logo.git
+git clone https://github.com/jhonsu01/animate-logo.git
 cd animate-logo
 
 # Instalar dependencias
